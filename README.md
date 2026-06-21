@@ -243,11 +243,3 @@ Verified against the primary source.
 3. Krusche P, Trigg L, Boutros PC, et al. (2019). Best practices for benchmarking germline small-variant calls in human genomes. *Nature Biotechnology*, 37(5), 555–560. doi:10.1038/s41587-019-0054-x. *(GA4GH benchmarking best practices; the hap.py stratification approach this framework follows.)*
 4. Olson ND, Wagner J, McDaniel J, et al. (2022). PrecisionFDA Truth Challenge V2: Calling variants from short and long reads in difficult-to-map regions. *Cell Genomics*, 2(5), 100129. doi:10.1016/j.xgen.2022.100129. *(Stratified evaluation across difficult genomic regions.)*
 
----
-
-## Author
-
-**O.J. Odimayo** — Bioinformatics Data Engineer
-MSc Applied Data Science · BSc Genetics and Molecular Biology
-
-[github.com/gbadedata](https://github.com/gbadedata) · [linkedin.com/in/oluwagbade-odimayo-](https://www.linkedin.com/in/oluwagbade-odimayo-) · oluwagbadeodimayo@gmail.com
