@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+data/
+.env
+*.egg-info/
+.pytest_cache/
+.coverage
+evidence/figures/*.png
+evidence/reports/*.json
+diag_*.py
+inspect_*.py
