@@ -71,10 +71,14 @@ def load_synthetic(seed: int = 42, n: int = 600) -> list[VariantCall]:
         else:
             ref, alt = "C", "T"
 
-        # QUAL: difficult regions get high QUAL too (the caller THINKS it is
-        # confident), but its true correctness is lower there. That mismatch
-        # is the miscalibration the benchmark detects.
-        qual = float(rng.uniform(20, 90))
+        # QUAL spans a realistic range including low-confidence calls. Low
+        # QUAL maps to genuinely lower confidence (phred scale), so the
+        # calibration curve has spread across the confidence axis rather than
+        # bunching near 1.0. Difficult regions skew toward lower QUAL too.
+        if in_difficult:
+            qual = float(rng.uniform(2, 40))
+        else:
+            qual = float(rng.uniform(8, 60))
         stated_conf = qual_to_confidence(qual)
 
         # True correctness probability: in easy regions it tracks the stated

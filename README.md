@@ -157,19 +157,29 @@ The synthetic fixture is built with a deliberately realistic miscalibration (ove
 
 ## Running on real GIAB data
 
-On a machine with internet access, download the GIAB truth set and run a real query VCF against it:
+For real benchmarking, the recommended path stands on hap.py (the GA4GH/GIAB field-standard tool) for variant matching, then runs this framework's calibration and abstention analysis on hap.py's annotated output. This is a deliberate division of labour: hap.py solves the hard, well-validated problem of variant normalisation and haplotype-aware matching (including the messy realities of multi-allelic representation, complex variants, and the MHC region); this framework adds the calibration curve, ECE, and abstention analysis that hap.py does not provide.
 
 ```bash
-# GIAB HG001 v4.2.1 truth set (GRCh38):
-#   https://ftp-trace.ncbi.nlm.nih.gov/ReferenceSamples/giab/release/NA12878_HG001/latest/GRCh38/
+# 1. Get the GIAB HG001 v4.2.1 truth set (GRCh38):
+#    https://ftp-trace.ncbi.nlm.nih.gov/ReferenceSamples/giab/release/NA12878_HG001/latest/GRCh38/
+#    HG001_GRCh38_1_22_v4.2.1_benchmark.vcf.gz  (+ .bed)
 
-python3 -m src.run_benchmark \
-    --query your_calls.vcf.gz \
-    --truth HG001_GRCh38_1_22_v4.2.1_benchmark.vcf.gz \
-    --caller-name gatk-haplotypecaller
+# 2. Run hap.py to match your caller's VCF against truth:
+hap.py \
+    HG001_GRCh38_1_22_v4.2.1_benchmark.vcf.gz \
+    your_caller.vcf.gz \
+    -f HG001_GRCh38_1_22_v4.2.1_benchmark.bed \
+    -r GRCh38_reference.fasta \
+    -o happy_out
+
+# 3. Run this framework's calibration + abstention layers on hap.py's
+#    annotated output VCF:
+python3 -m src.run_benchmark --happy-vcf happy_out.vcf.gz --caller-name gatk-hc
 ```
 
-The loader parses both VCFs, matches on chrom:pos:ref:alt, assigns TP/FP/FN, and runs all four layers. For region stratification on real data, intersect the calls with GIAB's stratification BEDs (from the GIAB genome-stratifications resource) before loading.
+The adapter (`src/happy_adapter.py`) reads hap.py's benchmarking decisions (the BD FORMAT field: TP / FP / FN) and the query QUAL, producing the same `VariantCall` objects the calibration and filtering layers consume. The result is a real calibration and abstention analysis built on field-standard matching.
+
+A direct `--query` / `--truth` path also exists for already-normalised VCFs, using exact chrom:pos:ref:alt matching, but for real GIAB benchmarking the hap.py path above is correct, because exact matching cannot resolve the variant-representation differences hap.py was built to handle.
 
 ---
 
@@ -208,7 +218,7 @@ A benchmark whose own metric is wrong is worse than no benchmark. The calibratio
 ## Limitations
 
 - **Synthetic fixture for the framework; real GIAB for findings.** The bundled results are from a synthetic caller with injected miscalibration, for demonstration and testing. Real conclusions require running a real caller's VCF against GIAB, which the live path supports.
-- **Matching is exact on chrom:pos:ref:alt.** Production benchmarking (e.g. hap.py) does sophisticated variant normalisation and haplotype-aware comparison. This framework uses exact matching, which is correct for normalised VCFs but stricter than hap.py on representation differences.
+- **Matching: exact, or delegated to hap.py.** The built-in matcher uses exact chrom:pos:ref:alt comparison, correct for normalised VCFs but stricter than hap.py on representation differences. For real GIAB benchmarking, the [hap.py adapter](#running-on-real-giab-data) delegates matching to the field-standard tool and runs the calibration and abstention layers on its output, which is the recommended real-data path.
 - **Region stratification depends on supplied BEDs.** Without GIAB stratification BEDs intersected onto the calls, the region layer reports only the strata present in the input.
 - **Single-sample, single-caller per run.** Multi-caller comparison would be a natural extension; the report is already structured to support it.
 
