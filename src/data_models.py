@@ -21,7 +21,7 @@ class VariantType(str, Enum):
     INDEL = "indel"
 
     @staticmethod
-    def from_alleles(ref: str, alt: str) -> "VariantType":
+    def from_alleles(ref: str, alt: str) -> VariantType:
         """A call is an SNV iff ref and alt are both single bases."""
         if len(ref) == 1 and len(alt) == 1:
             return VariantType.SNV
@@ -66,7 +66,7 @@ class VariantCall(BaseModel):
         chrom: str, pos: int, ref: str, alt: str,
         status: MatchStatus, qual: float | None = None,
         strata: list[str] | None = None,
-    ) -> "VariantCall":
+    ) -> VariantCall:
         return VariantCall(
             chrom=chrom, pos=pos, ref=ref, alt=alt, qual=qual,
             variant_type=VariantType.from_alleles(ref, alt),

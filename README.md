@@ -4,7 +4,7 @@
 
 [![CI](https://github.com/gbadedata/variant-calling-calibration-benchmark/actions/workflows/ci.yml/badge.svg)](https://github.com/gbadedata/variant-calling-calibration-benchmark/actions/workflows/ci.yml)
 [![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/downloads/)
-[![tests](https://img.shields.io/badge/tests-49%20passing-brightgreen.svg)](#testing)
+[![tests](https://img.shields.io/badge/tests-54%20passing-brightgreen.svg)](#testing)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 Most variant-calling benchmarks report a single F1 against a truth set and stop. That number hides the two things a deployment decision actually depends on: where the caller fails, and whether you can trust the confidence score it attaches to each call. This framework measures both.
@@ -230,7 +230,7 @@ A benchmark whose own metric is wrong is worse than no benchmark. The calibratio
 python3 -m pytest tests/ -v
 ```
 
-**49 tests**, fully offline, deterministic, no network. Coverage includes the phred QUAL conversion against hand-computed values (QUAL 20 = 0.99, QUAL 30 = 0.999), concordance against hand-computed precision/recall, the ECE metric against synthetically calibrated and miscalibrated inputs, and the filter sweep's safe-threshold logic. CI runs ruff and pytest on every push.
+**54 tests**, fully offline, deterministic, no network. Coverage includes the phred QUAL conversion against hand-computed values (QUAL 20 = 0.99, QUAL 30 = 0.999), concordance against hand-computed precision/recall, the ECE metric against synthetically calibrated and miscalibrated inputs, and the filter sweep's safe-threshold logic. CI runs ruff and pytest on every push.
 
 ---
 
