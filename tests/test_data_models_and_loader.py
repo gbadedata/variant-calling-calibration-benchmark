@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-
 from src.data_loader import load_synthetic, match_against_truth, qual_to_confidence
 from src.data_models import (
     CalibrationBin,

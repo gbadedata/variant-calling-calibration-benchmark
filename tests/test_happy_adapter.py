@@ -7,9 +7,8 @@ TRUTH and QUERY sample columns map to the correct MatchStatus.
 
 from __future__ import annotations
 
-from src.happy_adapter import parse_happy_vcf
 from src.data_models import MatchStatus, VariantType
-
+from src.happy_adapter import parse_happy_vcf
 
 _HAPPY_VCF = """\
 ##fileformat=VCFv4.2
